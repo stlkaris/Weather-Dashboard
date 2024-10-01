@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import './Weather.css'
 import search_icon from '../assets/search.png'
 import clear_icon from '../assets/clear.png'
@@ -12,10 +12,10 @@ import wind_icon from '../assets/wind.png'
 
 
 const Weather = () => {
-
-    const inputRef = useRef();
-
-    const [weatherData, setWeatherData] = useState(false)
+        const inputRef = useRef();
+        const [weatherData, setWeatherData] = useState(null);  
+        const [hasSearched, setHasSearched] = useState(false); 
+    
 
     const allIcons= {
         "01d": clear_icon,
@@ -57,21 +57,20 @@ const Weather = () => {
                 temperature: Math.floor(data.main.temp),
                 location: data.name,
                 icon: icon
-            })
+            });
+
+            setHasSearched(true);
+
         } catch (error) {
-          setWeatherData(false)
+          setWeatherData(null)
           console.error("Error in fetching weateher data")
         }
     }
 
-    useEffect(() => {
-        search("London")
-    },[])
-
   return (
     <div className='weather'>
         <div className='search-bar'>
-            <input ref={inputRef} type="text" placeholder='Search' />
+            <input ref={inputRef} type="text" placeholder='Enter City Name' />
             <img src={search_icon} alt="" onClick={()=>search(inputRef.current.value)}/>
         </div>
         {weatherData?<>
@@ -97,7 +96,7 @@ const Weather = () => {
     </>:<></>}
         
        
-    </div>
+ </div>
   )
 }
 
